@@ -1,9 +1,13 @@
 export class Game {
-  constructor() {}
-
-  score() {
-    return 0
+  constructor() {
+    this._score = 0
   }
 
-  roll(pins) {}
+  score() {
+    return this._score
+  }
+
+  roll(pins) {
+    this._score += pins
+  }
 }
