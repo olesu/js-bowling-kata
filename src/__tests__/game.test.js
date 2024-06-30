@@ -26,6 +26,13 @@ test('one strike', () => {
   expect(game.score).toBe(24)
 })
 
+test('perfect game', () => {
+  const rolls = rollMany(12, 10)
+  const game = rolls.reduce(applyRoll, new Game())
+
+  expect(game.score).toBe(300)
+})
+
 function applyRoll(game, pins) {
   return game.roll(pins)
 }
