@@ -7,37 +7,49 @@ export class Game {
   get score() {
     function scoreAccumulator(rolls) {
       return ({ score, frameIndex }) => {
-        function spareBonus() {
-          return 10 + rolls[frameIndex + 2]
+        function nextScore(currentScore, currentFrameIndex) {
+          var score = currentScore
+          var frameIndex = currentFrameIndex
+
+          function spareBonus() {
+            return 10 + rolls[frameIndex + 2]
+          }
+
+          function strikeBonus() {
+            return 10 + rolls[frameIndex + 1] + rolls[frameIndex + 2]
+          }
+
+          function scoreFrorFrame() {
+            return rolls[frameIndex] + rolls[frameIndex + 1]
+          }
+
+          function isSpare() {
+            return rolls[frameIndex] + rolls[frameIndex + 1] === 10
+          }
+
+          function isStrike() {
+            return rolls[frameIndex] === 10
+          }
+
+          if (isStrike()) {
+            // strike
+            score = score + strikeBonus()
+            frameIndex += 1
+          } else if (isSpare()) {
+            score = score + spareBonus()
+            frameIndex += 2
+          } else {
+            score = score + scoreFrorFrame()
+            frameIndex += 2
+          }
+
+          return {
+            score: score,
+            frameIndex: frameIndex,
+          }
         }
 
-        function scoreFrorFrame() {
-          return rolls[frameIndex] + rolls[frameIndex + 1]
-        }
-
-        function isSpare() {
-          return rolls[frameIndex] + rolls[frameIndex + 1] === 10
-        }
-
-        var score = score
-        var frameIndex = frameIndex
-
-        if (rolls[frameIndex] === 10) {
-          // strike
-          score = score + 10 + rolls[frameIndex + 1] + rolls[frameIndex + 2]
-          frameIndex += 1
-        } else if (isSpare()) {
-          score = score + spareBonus()
-          frameIndex += 2
-        } else {
-          score = score + scoreFrorFrame()
-          frameIndex += 2
-        }
-
-        return {
-          score: score,
-          frameIndex: frameIndex,
-        }
+        return nextScore(score, frameIndex)
       }
     }
 
