@@ -19,6 +19,13 @@ test('one spare', () => {
   expect(game.score).toBe(16)
 })
 
+test('one strike', () => {
+  const rolls = [10, 3, 4, ...rollMany(16, 0)]
+  const game = rolls.reduce(applyRoll, new Game())
+
+  expect(game.score).toBe(24)
+})
+
 function applyRoll(game, pins) {
   return game.roll(pins)
 }
