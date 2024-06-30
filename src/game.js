@@ -7,12 +7,28 @@ export class Game {
   get score() {
     function scoreAccumulator(rolls) {
       return ({ score, frameIndex }) => {
+        function spareBonus() {
+          return 10 + rolls[frameIndex + 2]
+        }
+
         function scoreFrorFrame() {
           return rolls[frameIndex] + rolls[frameIndex + 1]
         }
 
+        function isSpare() {
+          return rolls[frameIndex] + rolls[frameIndex + 1] === 10
+        }
+
+        var score
+
+        if (isSpare()) {
+          score = score + spareBonus()
+        } else {
+          score = score + scoreFrorFrame()
+        }
+
         return {
-          score: score + scoreFrorFrame(),
+          score: score,
           frameIndex: frameIndex + 2,
         }
       }
